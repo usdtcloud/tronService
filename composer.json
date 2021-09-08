@@ -22,11 +22,11 @@
         }
     ],
     "require-dev": {
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^9"
     },
     "autoload": {
         "psr-4": {
-            "Kaadon\\Tron\\": "/src/TronService"
+            "Kaadon\\Tron\\": "TronService/src"
         }
     }
 }
