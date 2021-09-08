@@ -1,7 +1,7 @@
 {
     "name": "kaadon/tronservice",
     "type": "library",
-    "description": "Qiniu Resource (Cloud) Storage SDK for PHP",
+    "description": "kaadon TronService for PHP",
     "keywords": ["tron", "trx", "chain", "kaadon", "block"],
     "homepage": "http://developer.kaadon.com/",
     "license": "MIT",
