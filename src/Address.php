@@ -1,6 +1,6 @@
 <?php
 
-namespace Kaadon\Tron\TronService;
+namespace Kaadon\TronService;
 
 use kornrunner\Keccak;
 use StephenHill\Base58;

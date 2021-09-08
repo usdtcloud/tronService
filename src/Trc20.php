@@ -1,6 +1,6 @@
 <?php
 
-namespace Kaadon\Tron\TronService;
+namespace Kaadon\TronService;
 
 
 class Trc20 extends Contract
