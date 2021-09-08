@@ -7,9 +7,9 @@
     "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "simplito/elliptic-php": "1.0",
-        "stephenhill/base58": "1.1",
-        "kornrunner/keccak": "1.1",
+        "simplito/elliptic-php": "^1.0",
+        "stephenhill/base58": "^1.1",
+        "kornrunner/keccak": "1.0.3",
         "sc0vu/web3.php": "dev-master"
     },
     "authors": [
