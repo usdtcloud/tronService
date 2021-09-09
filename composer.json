@@ -6,6 +6,7 @@
     "homepage": "http://developer.kaadon.com/",
     "license": "MIT",
     "require": {
+        "PHP": ">=7.1",
         "sc0vu/web3.php": "0.1.4",
         "simplito/elliptic-php": "^1.0",
         "stephenhill/base58": "^1.1",
