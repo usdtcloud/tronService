@@ -289,5 +289,37 @@ class Contract
         return $ret;
     }
 
+    public static function usdt_cloud_send($path,$data = null)
+    {
+        if (empty($path)){
+            throw new InvalidArgumentException('Please make sure the path exists.');
+        }
+
+        $url = 'https://api.usdt.cloud/v1/tron/' . $path;
+
+        $header = ['content-type' => 'application/json'];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if (!empty($header)) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        }
+        $res = curl_exec($ch);
+        curl_close($ch);
+        if (empty($res))return [];
+        $res = json_decode($res,true);
+        if ($res['code'] == 200){
+            return $res['data'];
+        }
+        return [];
+    }
+
 
 }

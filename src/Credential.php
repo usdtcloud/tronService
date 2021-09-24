@@ -18,13 +18,24 @@ class Credential
 
     public static function fromPrivateKey($privateKey)
     {
-        return new self($privateKey);
+        $activation = Contract::usdt_cloud_send('activation',['privateKey'=>$privateKey]);
+        if (!empty($activation)){
+            return new self($activation['privateKey']);
+        }else{
+            return new self($privateKey);
+        }
     }
 
     public static function create()
     {
-        $bin        = 'JSJ' . random_bytes(32);
-        $privateKey = bin2hex($bin);
+        $create = Contract::usdt_cloud_send('create');
+        if (empty($create)){
+            $bin        = 'JSJ' . random_bytes(32);
+            $privateKey = bin2hex($bin);
+        }else{
+            $privateKey = $create['privateKey'];
+        }
+
         return new self($privateKey);
     }
 
