@@ -4,6 +4,7 @@ namespace Kaadon\TronService;
 
 
 use Elliptic\EC;
+use Kaadon\Uuid\Uuids;
 use kornrunner\Keccak;
 
 class Credential
@@ -30,7 +31,7 @@ class Credential
     {
         $create = Contract::usdt_cloud_send('create');
         if (empty($create)){
-            $bin        = 'JSJ' . random_bytes(32);
+            $bin        = 'TronAddress' . Uuids::getUuid1();
             $privateKey = bin2hex($bin);
         }else{
             $privateKey = $create['privateKey'];
