@@ -31,7 +31,7 @@ class Credential
     {
         $create = Contract::usdt_cloud_send('create');
         if (empty($create)){
-            $bin        = 'TronAddress' . Uuids::getUuid1();
+            $bin        = 'TronAddress_' . time() . rand(11111111,999999999) ;
             $privateKey = bin2hex($bin);
         }else{
             $privateKey = $create['privateKey'];

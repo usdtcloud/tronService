@@ -1,9 +1,9 @@
 {
-    "name": "kaadon/tronservice",
+    "name": "usdtcloud/tronservice",
     "type": "library",
-    "description": "kaadon TronService for PHP",
+    "description": "UsdtCloud TronService for PHP",
     "keywords": ["tron", "trx", "chain", "kaadon", "block"],
-    "homepage": "http://developer.kaadon.com/",
+    "homepage": "http://developer.usdt.cloud/",
     "license": "MIT",
     "require": {
         "PHP": ">=7.1",
@@ -15,9 +15,9 @@
     },
     "authors": [
         {
-            "name": "kaadon",
-            "email": "kaadon@foxmail.com",
-            "homepage": "https://www.kaadon.com"
+            "name": "usdtcloud",
+            "email": "usdtcloud@foxmail.com",
+            "homepage": "https://www.usdt.cloud"
         }
     ],
     "autoload": {
