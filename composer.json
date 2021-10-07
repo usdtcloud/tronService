@@ -11,12 +11,11 @@
         "simplito/elliptic-php": "^1.0",
         "stephenhill/base58": "^1.1",
         "kornrunner/keccak": "~1.0",
-        "kaadon/uuid": "^1.0"
     },
     "authors": [
         {
             "name": "usdtcloud",
-            "email": "usdtcloud@foxmail.com",
+            "email": "usdtcloud@gmail.com",
             "homepage": "https://www.usdt.cloud"
         }
     ],
