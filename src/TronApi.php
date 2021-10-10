@@ -13,7 +13,7 @@ class TronApi
 
     public static function mainNet()
     {
-        return new self('http://13.124.62.58:8090');
+        return new self('http://13.124.62.58:8090');//韩国节点
     }
 
     public static function testNet()
