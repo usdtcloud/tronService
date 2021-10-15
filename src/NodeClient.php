@@ -11,7 +11,7 @@ class NodeClient
 
     public static function mainNet()
     {
-        return new self('http://13.124.62.58:8090');
+        return new self('https://api.trongrid.io');
     }
 
     public static function testNet()
