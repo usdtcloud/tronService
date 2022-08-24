@@ -4,10 +4,12 @@ namespace Usdtcloud\TronService;
 
 
 use GuzzleHttp\Client;
+use think\facade\Config;
 
 class NodeClient
 {
     protected $client;
+    protected $api_key;
 
     public static function mainNet()
     {
@@ -21,9 +23,16 @@ class NodeClient
 
     public function __construct($uri)
     {
+        $is_apikey = Config::has('tronservice.api_key');
+        if ($is_apikey){
+            $this->api_key = Config::get('tronservice.api_key');
+        }
         $opts         = [
             'base_uri' => $uri,
         ];
+        if ($this->api_key){
+            $opts['headers'] = ["TRON-PRO-API-KEY"=>$this->api_key];
+        }
         $this->client = new Client($opts);
     }
 
