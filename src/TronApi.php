@@ -10,18 +10,19 @@ class TronApi
     protected $fullNode;
     protected $solidityNode;
     protected $eventNode;
+    protected $apikey;
 
-    public static function mainNet()
+    public static function mainNet(?string $apikey = null)
     {
-        return new self('https://api.trongrid.io');//韩国节点 http://13.124.62.58:8090
+        return new self('https://api.trongrid.io', null, null, $apikey);//韩国节点 http://13.124.62.58:8090
     }
 
-    public static function testNet()
+    public static function testNet(?string $apikey = null)
     {
-        return new self('https://api.shasta.trongrid.io');
+        return new self('https://api.shasta.trongrid.io', null, null, $apikey);
     }
 
-    public function __construct($fullNodeUrl, $solidityNodeUrl = null, $eventNodeUrl = null)
+    public function __construct($fullNodeUrl, $solidityNodeUrl = null, $eventNodeUrl = null, ?string $apikey = null)
     {
         if (is_null($solidityNodeUrl)) {
             $solidityNodeUrl = $fullNodeUrl;
@@ -29,9 +30,9 @@ class TronApi
         if (is_null($eventNodeUrl)) {
             $eventNodeUrl = $fullNodeUrl;
         }
-        $this->fullNode     = new NodeClient($fullNodeUrl);
-        $this->solidityNode = new NodeClient($solidityNodeUrl);
-        $this->eventNode    = new NodeClient($eventNodeUrl);
+        $this->fullNode     = new NodeClient($fullNodeUrl, $apikey);
+        $this->solidityNode = new NodeClient($solidityNodeUrl, $apikey);
+        $this->eventNode    = new NodeClient($eventNodeUrl, $apikey);
     }
 
     public function getNextMaintenanceTime()

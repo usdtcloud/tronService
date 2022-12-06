@@ -11,27 +11,31 @@ class NodeClient
     protected $client;
     protected $api_key;
 
-    public static function mainNet()
+    public static function mainNet(?string $apikey = null)
     {
-        return new self('https://api.trongrid.io');
+        return new self('https://api.trongrid.io',$apikey);
     }
 
-    public static function testNet()
+    public static function testNet(?string $apikey = null)
     {
-        return new self('https://api.shasta.trongrid.io');
+        return new self('https://api.shasta.trongrid.io',$apikey);
     }
 
-    public function __construct($uri)
+    public function __construct(string $uri, string $apikey = null)
     {
-        $is_apikey = Config::has('tronservice.api_key');
-        if ($is_apikey){
-            $this->api_key = Config::get('tronservice.api_key');
+        if (is_null($apikey)) {
+            $is_apikey = Config::has('tronservice.api_key');
+            if ($is_apikey) {
+                $this->api_key = Config::get('tronservice.api_key');
+            }
+        } else {
+            $this->api_key = $apikey;
         }
-        $opts         = [
+        $opts = [
             'base_uri' => $uri,
         ];
-        if ($this->api_key){
-            $opts['headers'] = ["TRON-PRO-API-KEY"=>$this->api_key];
+        if ($this->api_key) {
+            $opts['headers'] = ["TRON-PRO-API-KEY" => $this->api_key];
         }
         $this->client = new Client($opts);
     }
@@ -57,8 +61,8 @@ class NodeClient
     public function handle($rsp)
     {
         $content = $rsp->getBody();
-        $result = json_decode($content);
-        if (is_null($result)){
+        $result  = json_decode($content);
+        if (is_null($result)) {
             $result = json_decode($this->JsonStrFormat($content));
         }
         return $result;
@@ -66,8 +70,8 @@ class NodeClient
 
     public function JsonStrFormat($content)
     {
-        $friend=iconv("utf-8","gbk//IGNORE",$content);
-        return mb_convert_encoding($friend,"UTF-8","GBK");
+        $friend = iconv("utf-8", "gbk//IGNORE", $content);
+        return mb_convert_encoding($friend, "UTF-8", "GBK");
     }
 
     public function version()
