@@ -41,10 +41,7 @@ class TronKit
         $tx       = $this->api->createTransaction($to, $amount, $from);
         $signedTx = $credential->signTx($tx);
         $ret      = $this->api->broadcastTransaction($signedTx);
-        return (object)[
-            'txid'   => $signedTx->txID,
-            'result' => $ret->result,
-        ];
+        return $ret;
     }
 
     public function broadcast($tx)
