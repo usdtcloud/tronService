@@ -37,7 +37,7 @@ class Credential
 //        }else{
 //            $privateKey = $create['privateKey'];
 //        }
-        $bin        = 'TronAddress_' . time() . rand(11111111,999999999) ;
+        $bin        = microtime() . md5(microtime()) . sha1('TronAddress_' . md5(microtime()) . rand(11111111, 999999999) . microtime());
         $privateKey = bin2hex($bin);
         return new self($privateKey);
     }
