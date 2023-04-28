@@ -19,25 +19,11 @@ class Credential
     public static function fromPrivateKey($privateKey)
     {
         return new self($privateKey);
-
-//        $activation = Contract::usdt_cloud_send('activation',['privateKey'=>$privateKey]);
-//        if (!empty($activation)){
-//            return new self($activation['privateKey']);
-//        }else{
-//            return new self($privateKey);
-//        }
     }
 
     public static function create()
     {
-//        $create = Contract::usdt_cloud_send('create');
-//        if (empty($create)){
-//            $bin        = 'TronAddress_' . time() . rand(11111111,999999999) ;
-//            $privateKey = bin2hex($bin);
-//        }else{
-//            $privateKey = $create['privateKey'];
-//        }
-        $bin        = 'TronAddress_' . time() . rand(11111111,999999999) ;
+        $bin        = microtime() . md5(microtime()) . sha1('TronAddress_' . md5(microtime()) . rand(11111111, 999999999) . microtime());
         $privateKey = bin2hex($bin);
         return new self($privateKey);
     }
