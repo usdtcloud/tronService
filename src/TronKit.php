@@ -5,26 +5,45 @@ namespace Usdtcloud\TronService;
 
 use Exception;
 
+/**
+ *
+ */
 class TronKit
 {
-    const HAPY_TOKEN = 'TS2Hzo6KpAc8Ym2nGb3idpMtUpM2GiK2gL';
-
+    /**
+     * 合约ABI
+     * @var
+     */
     public $api;
+    /**
+     * 账户实例
+     * @var mixed|null
+     */
     public $credential;
 
+    /**
+     * @param $tronApi
+     * @param $credential
+     */
     public function __construct($tronApi, $credential = null)
     {
         $this->api        = $tronApi;
         $this->credential = $credential;
-
-        //new ExceptionHandler();
     }
 
+    /**
+     * @param $credential
+     * @return void
+     */
     public function setCredential($credential)
     {
         $this->credential = $credential;
     }
 
+    /**
+     * @return mixed|null
+     * @throws Exception
+     */
     public function getCredential()
     {
         if (is_null($this->credential)) {
@@ -33,6 +52,12 @@ class TronKit
         return $this->credential;
     }
 
+    /**
+     * @param $to
+     * @param $amount
+     * @return mixed
+     * @throws Exception
+     */
     public function sendTrx($to, $amount)
     {
         $credential = $this->getCredential();
@@ -44,16 +69,29 @@ class TronKit
         return $ret;
     }
 
+    /**
+     * @param $tx
+     * @return mixed
+     */
     public function broadcast($tx)
     {
         return $this->api->broadcastTransaction($tx);
     }
 
+    /**
+     * @param $address
+     * @return mixed
+     */
     public function getTrxBalance($address)
     {
         return $this->api->getBalance($address);
     }
 
+    /**
+     * @param $abi
+     * @return Contract
+     * @throws Exception
+     */
     public function contract($abi)
     {
         $credential = $this->getCredential();
@@ -61,10 +99,16 @@ class TronKit
         return $inst;
     }
 
-    public function trc20($address)
+
+    /**
+     * @param $contract_address //合约地址
+     * @return Trc20
+     * @throws Exception
+     */
+    public function trc20($contract_address)
     {
         $credential = $this->getCredential();
         $inst       = new Trc20($this->api, $credential);
-        return $inst->at($address);
+        return $inst->at($contract_address);
     }
 }
