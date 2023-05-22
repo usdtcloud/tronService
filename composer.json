@@ -10,7 +10,6 @@
         "simplito/elliptic-php": "^1.0",
         "stephenhill/base58": "^1.1",
         "kornrunner/keccak": "~1.0",
-        "topthink/framework": "^6",
         "kaadon/web3.php": "^1.0"
     },
     "authors": [
@@ -31,5 +30,8 @@
                 "tronservice": "config/tronservice.php"
             }
         }
+    },
+    "require-dev": {
+        "topthink/framework": "^6.1"
     }
 }
