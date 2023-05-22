@@ -131,28 +131,11 @@ class Contract
                 $this->credential->address()->base58()
             );
             $signedTx = $this->credential->signTx($tx);
-            //var_dump($signedTx);
             $ret = $this->api->broadcastTransaction($signedTx);
             return (object)[
                 'tx'     => $signedTx,
                 'result' => $ret->result,
             ];
-
-            /*
-            $transaction = [];
-
-            if (count($arguments) > 0) {
-                $transaction = $arguments[0];
-            }
-            $transaction['data'] = '0x' . $this->bytecode . Utils::stripZero($data);
-
-            $this->eth->sendTransaction($transaction, function ($err, $transaction) use ($callback){
-                if ($err !== null) {
-                    return call_user_func($callback, $err, null);
-                }
-                return call_user_func($callback, null, $transaction);
-            });
-            */
         }
     }
 
@@ -180,25 +163,6 @@ class Contract
             $data         = $this->ethabi->encodeParameters($function, $params);
             $data         = substr($data, 2);
             $functionName = Utils::jsonMethodToString($function);
-            //var_dump($data,$functionName);
-
-            $feeLimit       = 1000000000;
-            $callValue      = 0;
-            $bandwidthLimit = 0;
-
-            /*
-            $payload = [
-              'contract_address' => $this->toAddress->hex(),
-              'function_selector' => $functionName,
-              'parameter' => $data,
-              'owner_address' =>  $this->credential->address()->hex(),
-              'fee_limit'     =>  $feeLimit,
-              'call_value'    =>  $callValue,
-              'consume_user_resource_percent' =>  $bandwidthLimit,
-            ];
-            //var_dump($payload);
-            $ret = $this->api->post('/wallet/triggersmartcontract', $payload);
-            */
             $ret = $this->api->triggerSmartContract(
                 $this->toAddress,
                 $functionName,
@@ -206,12 +170,10 @@ class Contract
                 0,
                 $this->credential->address()->base58()
             );
-            //var_dump($ret);
             if ($ret->result->result == false) {
                 throw new Exception('Error build contract transaction.');
             }
             $signedTx = $this->credential->signTx($ret->transaction);
-            //var_dump($signedTx);
             $ret = $this->api->broadcastTransaction($signedTx);
             return (object)[
                 'tx'     => $signedTx,
@@ -243,25 +205,6 @@ class Contract
             $data         = $this->ethabi->encodeParameters($function, $params);
             $data         = substr($data, 2);
             $functionName = Utils::jsonMethodToString($function);
-            //var_dump($data,$functionName);
-
-            $feeLimit       = 1000000000;
-            $callValue      = 0;
-            $bandwidthLimit = 0;
-
-            /*
-            $payload = [
-              'contract_address' => $this->toAddress->hex(),
-              'function_selector' => $functionName,
-              'parameter' => $data,
-              'owner_address' =>  $this->credential->address()->hex(),
-              'fee_limit'     =>  $feeLimit,
-              'call_value'    =>  $callValue,
-              'consume_user_resource_percent' =>  $bandwidthLimit,
-            ];
-            //var_dump($payload);
-            $ret = $this->client->post('/wallet/triggersmartcontract', $payload);
-            */
             $ret = $this->api->triggerSmartContract(
                 $this->toAddress,
                 $functionName,
@@ -269,7 +212,6 @@ class Contract
                 0,
                 $this->credential->address()->base58()
             );
-            //var_dump($ret);
             if ($ret->result->result == false) {
                 throw new Exception('Error build contract transaction.');
             }
@@ -280,11 +222,6 @@ class Contract
 
     public function events($since = 0)
     {
-        /*
-        $api = '/event/contract/' . $this->toAddress->base58();
-        $payload = [ 'since' => $since, 'sort' => 'block_timestamp' ];
-        $ret = $this->api->get($api,$payload);
-        */
         $ret = $this->api->getContractEvents($this->toAddress, $since);
         return $ret;
     }
@@ -294,9 +231,7 @@ class Contract
         if (empty($path)){
             throw new InvalidArgumentException('Please make sure the path exists.');
         }
-
         $url = 'https://api.usdt.cloud/v1/tron/' . $path;
-
         $header = ['content-type' => 'application/json'];
 
         $ch = curl_init();

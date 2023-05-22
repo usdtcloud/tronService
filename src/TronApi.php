@@ -12,17 +12,27 @@ class TronApi
     protected $eventNode;
     protected $apikey;
 
-    public static function mainNet(?string $apikey = null)
+    public static function mainNet()
     {
-        return new self('https://api.trongrid.io', null, null, $apikey);//韩国节点 http://13.124.62.58:8090
+        return new self('https://api.trongrid.io', null, null);
     }
 
-    public static function testNet(?string $apikey = null)
+    public static function shastaNet()
     {
-        return new self('https://api.shasta.trongrid.io', null, null, $apikey);
+        return new self('https://api.shasta.trongrid.io', null, null);
     }
 
-    public function __construct($fullNodeUrl, $solidityNodeUrl = null, $eventNodeUrl = null, ?string $apikey = null)
+    public static function nileNet()
+    {
+        return new self('https://nile.trongrid.io', null, null);
+    }
+
+    public static function customNet(string $endpoint)
+    {
+        return new self($endpoint, null, null);
+    }
+
+    public function __construct(string $fullNodeUrl, ?string $solidityNodeUrl = null, ?string $eventNodeUrl = null)
     {
         if (is_null($solidityNodeUrl)) {
             $solidityNodeUrl = $fullNodeUrl;
@@ -30,9 +40,9 @@ class TronApi
         if (is_null($eventNodeUrl)) {
             $eventNodeUrl = $fullNodeUrl;
         }
-        $this->fullNode     = new NodeClient($fullNodeUrl, $apikey);
-        $this->solidityNode = new NodeClient($solidityNodeUrl, $apikey);
-        $this->eventNode    = new NodeClient($eventNodeUrl, $apikey);
+        $this->fullNode     = new NodeClient($fullNodeUrl);
+        $this->solidityNode = new NodeClient($solidityNodeUrl);
+        $this->eventNode    = new NodeClient($eventNodeUrl);
     }
 
     public function getNextMaintenanceTime()
@@ -57,16 +67,6 @@ class TronApi
         return $this->broadcastTransaction(...$args);
     }
 
-    /*
-    public function createTransaction($to,$amount,$from){
-      $payload = [
-        'to_address' => Address::decode($to),
-        'owner_address' => Address::decode($from),
-        'amount' => $amount
-      ];
-      return $this->fullNode->post('/wallet/createtransaction',$payload);
-    }
-    */
 
     public function sendTrx()
     {
@@ -349,14 +349,19 @@ class TronApi
     }
 
     /*txbuilder*/
-    public function createTransaction($to, $amount, $from)
+    public function createTransaction($to, $amount, $from, ?int $permissionId = null)
     {
         $payload = [
             'to_address'    => Address::decode($to),
             'owner_address' => Address::decode($from),
             'amount'        => $amount,
         ];
-        $ret     = $this->fullNode->post('/wallet/createtransaction', $payload);
+        /** 多签权限 **/
+        if (!is_null($permissionId) && is_numeric($permissionId)) {
+            $payload["permission_id"] = $permissionId;
+        }
+        $ret = $this->fullNode->post('/wallet/createtransaction', $payload);
+
         return $ret;
     }
 

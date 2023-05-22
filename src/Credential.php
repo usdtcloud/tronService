@@ -48,7 +48,6 @@ class Credential
         $signature = $this->keyPair->sign($hex);
         $r         = $signature->r->toString('hex');
         $s         = $signature->s->toString('hex');
-        //$v = bin2hex(pack('C',$signature->recoveryParam));
         $v = bin2hex(chr($signature->recoveryParam));
         return $r . $s . $v;
     }
@@ -56,7 +55,6 @@ class Credential
     public function signTx($tx)
     {
         $signature = $this->sign($tx->txID);
-        //var_dump($signature);
         $tx->signature = [$signature];
         return $tx;
     }

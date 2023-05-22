@@ -21,7 +21,7 @@ class NodeClient
         return new self('https://api.shasta.trongrid.io',$apikey);
     }
 
-    public function __construct(string $uri, string $apikey = null)
+    public function __construct(string $uri, ?string $apikey = null)
     {
         if (is_null($apikey)) {
             $is_apikey = Config::has('tronservice.api_key');
