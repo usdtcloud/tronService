@@ -22,6 +22,11 @@ class TronKit
     public $credential;
 
     /**
+     * @var
+     */
+    public $transaction;
+
+    /**
      * @param $tronApi
      * @param $credential
      */
@@ -60,13 +65,17 @@ class TronKit
      */
     public function sendTrx($to, $amount)
     {
-        $credential = $this->getCredential();
-        $from       = $credential->address()->base58();
-
-        $tx       = $this->api->createTransaction($to, $amount, $from);
-        $signedTx = $credential->signTx($tx);
+        $signedTx = $this->sendTrxData($to, $amount);
         $ret      = $this->api->broadcastTransaction($signedTx);
         return $ret;
+    }
+
+    public function sendTrxData($to, $amount)
+    {
+        $credential = $this->getCredential();
+        $from       = $credential->address()->base58();
+        $tx         = $this->api->createTransaction($to, $amount, $from);
+        return $credential->signTx($tx);
     }
 
     /**
@@ -92,11 +101,10 @@ class TronKit
      * @return Contract
      * @throws Exception
      */
-    public function contract($abi)
+    public function contract($abi): Contract
     {
         $credential = $this->getCredential();
         return new Contract($this->api, $abi, $credential);
-        return $inst;
     }
 
 
@@ -105,7 +113,7 @@ class TronKit
      * @return Trc20
      * @throws Exception
      */
-    public function trc20($contract_address)
+    public function trc20(string $contract_address): Trc20
     {
         $credential = $this->getCredential();
         $inst       = new Trc20($this->api, $credential);

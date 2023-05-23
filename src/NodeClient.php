@@ -21,12 +21,12 @@ class NodeClient
         return new self('https://api.shasta.trongrid.io',$apikey);
     }
 
-    public function __construct(string $uri, string $apikey = null)
+    public function __construct(string $uri, ?string $apikey = null)
     {
         if (is_null($apikey)) {
-            $is_apikey = Config::has('tronservice.api_key');
+            $is_apikey = (new \think\Config())->has('tronservice.api_key');
             if ($is_apikey) {
-                $this->api_key = Config::get('tronservice.api_key');
+                $this->api_key = (new \think\Config())->get('tronservice.api_key');
             }
         } else {
             $this->api_key = $apikey;
@@ -60,8 +60,13 @@ class NodeClient
 
     public function handle($rsp)
     {
+
         $content = $rsp->getBody();
         $result  = json_decode($content);
+
+        if (isset($result->Error)){
+            throw new TronException($result->Error);
+        }
         if (is_null($result)) {
             $result = json_decode($this->JsonStrFormat($content));
         }
