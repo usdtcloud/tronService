@@ -10,7 +10,6 @@ class TronApi
     protected $fullNode;
     protected $solidityNode;
     protected $eventNode;
-    protected $apikey;
 
     public static function mainNet()
     {
@@ -186,13 +185,6 @@ class TronApi
     public function getNowBlock($confirmed = true)
     {
         return $this->fullNode->get('/wallet/getnowblock', []);
-
-//        if ($confirmed) {
-//            return $this->solidityNode->get('/walletsolidity/getnowblock', []);
-//        } else {
-//        return $this->fullNode->get('/wallet/getnowblock', []);
-//
-//        }
     }
 
     public function getCurrentBlock()
@@ -357,11 +349,10 @@ class TronApi
             'amount'        => $amount,
         ];
         /** 多签权限 **/
-        if (!is_null($permissionId) && is_numeric($permissionId)) {
+        if (!is_null($permissionId)) {
             $payload["permission_id"] = $permissionId;
         }
         $ret = $this->fullNode->post('/wallet/createtransaction', $payload);
-
         return $ret;
     }
 
