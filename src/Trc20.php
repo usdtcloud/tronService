@@ -11,9 +11,13 @@ class Trc20 extends Contract
         parent::__construct($tronApi, ABI_TRC20, $credential);
     }
 
-    public function transfer($to, $value)
+    public function transfer($to, $value, bool $is_data = false)
     {
-        return $this->send('transfer', $to, $value);
+        if ($is_data) {
+            return $this->sendData('transfer', $to, $value);
+        } else {
+            return $this->send('transfer', $to, $value);
+        }
     }
 
     public function transferFrom($from, $to, $value)

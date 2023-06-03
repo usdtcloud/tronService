@@ -1,6 +1,6 @@
 <?php
 
-namespace Usdtcloud\TronService;
+namespace Usdtcloud\TronService\Exception;
 
 class TronException extends \RuntimeException
 {

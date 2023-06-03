@@ -40,8 +40,8 @@ class Contract
     protected $abi;
     protected $ethabi;
     protected $constructor = [];
-    protected $functions = [];
-    protected $events = [];
+    protected $functions   = [];
+    protected $events      = [];
 
     protected $toAddress;
     protected $bytecode;
@@ -131,7 +131,7 @@ class Contract
                 $this->credential->address()->base58()
             );
             $signedTx = $this->credential->signTx($tx);
-            $ret = $this->api->broadcastTransaction($signedTx);
+            $ret      = $this->api->broadcastTransaction($signedTx);
             return (object)[
                 'tx'     => $signedTx,
                 'result' => $ret->result,
@@ -141,6 +141,55 @@ class Contract
 
 
     public function send()
+    {
+        if (is_null($this->credential)) {
+            throw new Exception('Sender credential not set.');
+        }
+        if (isset($this->functions)) {
+            $arguments = func_get_args();
+            $method    = array_splice($arguments, 0, 1)[0];
+            if (!is_string($method) || !isset($this->functions[$method])) {
+                throw new InvalidArgumentException('Please make sure the method exists.');
+            }
+            $function = $this->functions[$method];
+            if (count($arguments) < count($function['inputs'])) {
+                throw new InvalidArgumentException('Please make sure you have put all function params and callback.');
+            }
+            $params       = array_splice($arguments, 0, count($function['inputs']));
+            $data         = $this->ethabi->encodeParameters($function, $params);
+            $data         = substr($data, 2);
+            $functionName = Utils::jsonMethodToString($function);
+            $ret          = $this->api->triggerSmartContract(
+                $this->toAddress,
+                $functionName,
+                $data,
+                0,
+                $this->credential->address()->base58()
+            );
+            if ($ret->result->result == false) {
+                throw new Exception('Error build contract transaction.');
+            }
+            $signedTx = $this->credential->signTx($ret->transaction);
+            $ret      = $this->api->broadcastTransaction($signedTx);
+            if (isset($ret->code)) {
+                return (object)[
+                    'code'    => false,
+                    'tx'      => $signedTx,
+                    'tx_id'   => $ret->txid,
+                    'message' => $ret->message,
+                ];
+            } else {
+                return (object)[
+                    'code'   => true,
+                    'tx'     => $signedTx,
+                    'tx_id'  => $ret->txid,
+                    'result' => $ret->result,
+                ];
+            }
+        }
+    }
+
+    public function sendData()
     {
         if (is_null($this->credential)) {
             throw new Exception('Sender credential not set.');
@@ -163,7 +212,7 @@ class Contract
             $data         = $this->ethabi->encodeParameters($function, $params);
             $data         = substr($data, 2);
             $functionName = Utils::jsonMethodToString($function);
-            $ret = $this->api->triggerSmartContract(
+            $ret          = $this->api->triggerSmartContract(
                 $this->toAddress,
                 $functionName,
                 $data,
@@ -174,11 +223,7 @@ class Contract
                 throw new Exception('Error build contract transaction.');
             }
             $signedTx = $this->credential->signTx($ret->transaction);
-            $ret = $this->api->broadcastTransaction($signedTx);
-            return (object)[
-                'tx'     => $signedTx,
-                'result' => $ret->result,
-            ];
+            return $signedTx;
         }
     }
 
@@ -205,7 +250,7 @@ class Contract
             $data         = $this->ethabi->encodeParameters($function, $params);
             $data         = substr($data, 2);
             $functionName = Utils::jsonMethodToString($function);
-            $ret = $this->api->triggerSmartContract(
+            $ret          = $this->api->triggerSmartContract(
                 $this->toAddress,
                 $functionName,
                 $data,
@@ -226,12 +271,12 @@ class Contract
         return $ret;
     }
 
-    public static function usdt_cloud_send($path,$data = null)
+    public static function usdt_cloud_send($path, $data = null)
     {
-        if (empty($path)){
+        if (empty($path)) {
             throw new InvalidArgumentException('Please make sure the path exists.');
         }
-        $url = 'https://api.usdt.cloud/v1/tron/' . $path;
+        $url    = 'https://api.usdt.cloud/v1/tron/' . $path;
         $header = ['content-type' => 'application/json'];
 
         $ch = curl_init();
@@ -248,9 +293,9 @@ class Contract
         }
         $res = curl_exec($ch);
         curl_close($ch);
-        if (empty($res))return [];
-        $res = json_decode($res,true);
-        if ($res['code'] == 200){
+        if (empty($res)) return [];
+        $res = json_decode($res, true);
+        if ($res['code'] == 200) {
             return $res['data'];
         }
         return [];

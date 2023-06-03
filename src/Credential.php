@@ -98,7 +98,11 @@ class Credential
     public function signTx($tx)
     {
         $signature     = $this->sign($tx->txID);
-        $tx->signature = [$signature];
+        if (isset($tx->signature)){
+            $tx->signature[count($tx->signature)] = $signature;
+        }else{
+            $tx->signature = [$signature];
+        }
         return $tx;
     }
 }
