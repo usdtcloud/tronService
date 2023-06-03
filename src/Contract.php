@@ -50,9 +50,7 @@ class Contract
 
     public function __construct($tronApi, $abi, $credential = null)
     {
-
         $abi = Utils::jsonToArray($abi, 5);
-
         foreach ($abi as $item) {
             if (isset($item['type'])) {
                 if ($item['type'] === 'function') {
@@ -64,13 +62,9 @@ class Contract
                 }
             }
         }
-
         $this->abi = $abi;
-
         $this->api = $tronApi;
-
         $this->credential = $credential;
-
         $this->ethabi = new Ethabi([
             'address'      => new TronAddress,
             'bool'         => new Boolean,
@@ -80,7 +74,6 @@ class Contract
             'string'       => new Str,
             'uint'         => new Uinteger,
         ]);
-
     }
 
     public function at($address)
