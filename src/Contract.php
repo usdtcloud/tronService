@@ -83,6 +83,14 @@ class Contract
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getToAddress()
+    {
+        return $this->toAddress;
+    }
+
     public function bytecode($bytecode)
     {
         $this->bytecode = Utils::stripZero($bytecode);

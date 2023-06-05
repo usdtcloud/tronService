@@ -19,6 +19,7 @@ function object_array($array)
 
 $kit = new TronKit(
     \Usdtcloud\TronService\TronApi::nileNet(),
+    \think\facade\Env::
     Credential::fromPrivateKey("88a1154cf638fb35f436301c4aa30aad7ad450e62648bd778c97800d8278c17a")
 //    Credential::fromPrivateKey("849cc9cd9514e70bdf624f3ba05360772c2b07a2a33998978e3e84571dd5cb7b")
 );
@@ -31,7 +32,7 @@ try {
     $Credential = Credential::fromPrivateKey("849cc9cd9514e70bdf624f3ba05360772c2b07a2a33998978e3e84571dd5cb7b");
     $tx         = $Credential->signTx($ret);
     $bool       = \Usdtcloud\TronService\TronApi::nileNet()->broadcastTransaction($ret);
-
+    var_dump($bool);
 } catch (\Exception $e) {
 
 }
