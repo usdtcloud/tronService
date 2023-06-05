@@ -220,6 +220,7 @@ class Contract
                 0,
                 $this->credential->address()->base58()
             );
+            $ret->transaction->raw_data->expiration += 82800000;
             if ($ret->result->result == false) {
                 throw new Exception('Error build contract transaction.');
             }
