@@ -11,22 +11,22 @@ class TronApi
     protected $solidityNode;
     protected $eventNode;
 
-    public static function mainNet()
+    public static function mainNet(): TronApi
     {
         return new self('https://api.trongrid.io', null, null);
     }
 
-    public static function shastaNet()
+    public static function shastaNet(): TronApi
     {
         return new self('https://api.shasta.trongrid.io', null, null);
     }
 
-    public static function nileNet()
+    public static function nileNet(): TronApi
     {
         return new self('https://nile.trongrid.io', null, null);
     }
 
-    public static function customNet(string $endpoint)
+    public static function customNet(string $endpoint): TronApi
     {
         return new self($endpoint, null, null);
     }
