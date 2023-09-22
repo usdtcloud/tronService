@@ -32,6 +32,6 @@
         }
     },
     "require-dev": {
-        "topthink/framework": "^6.1"
+        "topthink/framework": "^v8.0.2"
     }
 }
