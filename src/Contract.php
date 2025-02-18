@@ -189,6 +189,38 @@ class Contract
             }
         }
     }
+    public function defaultCall()
+    {
+        if (is_null($this->credential)) {
+            throw new Exception('Sender credential not set.');
+        }
+        if (isset($this->functions)) {
+            $arguments = func_get_args();
+            $method    = array_splice($arguments, 0, 1)[0];
+            if (!is_string($method) || !isset($this->functions[$method])) {
+                throw new InvalidArgumentException('Please make sure the method exists.');
+            }
+            $function = $this->functions[$method];
+            if (count($arguments) < count($function['inputs'])) {
+                throw new InvalidArgumentException('Please make sure you have put all function params and callback.');
+            }
+            $params       = array_splice($arguments, 0, count($function['inputs']));
+            $data         = $this->ethabi->encodeParameters($function, $params);
+            $data         = substr($data, 2);
+            $functionName = Utils::jsonMethodToString($function);
+            $ret          = $this->api->triggerSmartContract(
+                $this->toAddress,
+                $functionName,
+                $data,
+                0,
+                $this->credential->address()->base58()
+            );
+            if ($ret->result->result == false) {
+                throw new Exception('Error build contract transaction.');
+            }
+            return $ret;
+        }
+    }
 
     public function sendData()
     {
