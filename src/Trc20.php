@@ -29,7 +29,15 @@ class Trc20 extends Contract
     {
         return $this->send('approve', $spender, $value);
     }
+    public function approveCall($spender, $value)
+    {
+        return $this->defaultCall('approve', $spender, $value);
+    }
 
+    public function increaseApprovalCall($spender, $value)
+    {
+        return $this->defaultCall('increaseApproval', $spender, $value);
+    }
     public function allowance($owner, $spender)
     {
         return $this->call('allowance', $owner, $spender);

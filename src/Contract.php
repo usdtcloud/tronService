@@ -47,6 +47,10 @@ class Contract
     protected $bytecode;
 
     protected $credential;
+    /**
+     * @var \Usdtcloud\TronService\Address
+     */
+    private Address $default_credential;
 
     public function __construct($tronApi, $abi, $credential = null)
     {
@@ -82,7 +86,11 @@ class Contract
         $this->toAddress = $address;
         return $this;
     }
-
+    public function defaultAt($address)
+    {
+        $this->default_credential = Address::fromBase58($address);
+        return $this;
+    }
     /**
      * @return mixed
      */
@@ -129,7 +137,7 @@ class Contract
                 $data,
                 'EzToken',
                 0,
-                $this->credential->address()->base58()
+                $this->default_credential->base58()
             );
             $signedTx = $this->credential->signTx($tx);
             $ret      = $this->api->broadcastTransaction($signedTx);
