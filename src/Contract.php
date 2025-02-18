@@ -137,7 +137,7 @@ class Contract
                 $data,
                 'EzToken',
                 0,
-                $this->default_credential->base58()
+                $this->credential->address()->base58()
             );
             $signedTx = $this->credential->signTx($tx);
             $ret      = $this->api->broadcastTransaction($signedTx);
@@ -221,7 +221,7 @@ class Contract
                 $functionName,
                 $data,
                 0,
-                $this->credential->address()->base58()
+                $this->default_credential->base58()
             );
             if ($ret->result->result == false) {
                 throw new Exception('Error build contract transaction.');
